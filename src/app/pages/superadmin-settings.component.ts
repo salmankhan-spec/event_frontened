@@ -1,0 +1,184 @@
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SuperAdminAuthService } from '../superadmin-auth.service';
+import { SuperAdminOut, SuperAdminService } from '../superadmin.service';
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-3">
+          <div>
+            <h1 class="h5 mb-1 fw-bold">Settings</h1>
+            <div class="text-secondary small">Super admin account settings.</div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="auth.firstLogin()">
+          First login detected. Change your password now.
+        </div>
+
+        <div class="card border-0 bg-light">
+          <div class="card-body">
+            <h2 class="h6 fw-semibold mb-3">Change Password</h2>
+            <form [formGroup]="pwForm" (ngSubmit)="changePassword()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Old password</label>
+                  <input class="form-control" type="password" formControlName="old_password" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">New password</label>
+                  <input class="form-control" type="password" formControlName="new_password" placeholder="min 8 chars" />
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mt-3">
+                <button class="btn btn-dark" type="submit" [disabled]="pwForm.invalid || pwSaving()">
+                  <span *ngIf="!pwSaving()">Update password</span>
+                  <span *ngIf="pwSaving()" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  <span *ngIf="pwSaving()" class="ms-2">Saving…</span>
+                </button>
+                <div class="text-danger small" *ngIf="pwError()">{{ pwError() }}</div>
+                <div class="text-success small" *ngIf="pwOk()">Password updated.</div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <h2 class="h6 fw-semibold mb-3">Create Super Admin</h2>
+        <form [formGroup]="saForm" (ngSubmit)="createSuperAdmin()">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Email / Username</label>
+              <input class="form-control" formControlName="email" placeholder="admin2&#64;local" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Name (optional)</label>
+              <input class="form-control" formControlName="name" placeholder="Admin 2" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Temp password</label>
+              <input class="form-control" type="password" formControlName="temp_password" placeholder="min 8 chars" />
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-3 mt-3">
+            <button class="btn btn-outline-dark" type="submit" [disabled]="saForm.invalid || saCreating()">
+              <span *ngIf="!saCreating()">Create Super Admin</span>
+              <span *ngIf="saCreating()" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+              <span *ngIf="saCreating()" class="ms-2">Creating…</span>
+            </button>
+            <div class="text-danger small" *ngIf="saError()">{{ saError() }}</div>
+          </div>
+          <div class="form-text mt-2">
+            New super admin ka <span class="fw-semibold">first_login=true</span> hoga; login karke password change karna recommended.
+          </div>
+        </form>
+
+        <div class="table-responsive mt-3" *ngIf="superAdmins().length > 0">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Super Admin</th>
+                <th>Active</th>
+                <th>First login</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of superAdmins()">
+                <td>
+                  <div class="fw-semibold">{{ a.email }}</div>
+                  <div class="text-secondary small">ID: {{ a.id }}</div>
+                </td>
+                <td>
+                  <span class="badge" [class.text-bg-success]="a.is_active" [class.text-bg-secondary]="!a.is_active">
+                    {{ a.is_active ? 'Yes' : 'No' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [class.text-bg-warning]="a.first_login" [class.text-bg-secondary]="!a.first_login">
+                    {{ a.first_login ? 'Yes' : 'No' }}
+                  </span>
+                </td>
+                <td class="text-secondary small">{{ a.created_at }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `,
+})
+export class SuperAdminSettingsComponent {
+  superAdmins = signal<SuperAdminOut[]>([]);
+
+  pwSaving = signal(false);
+  pwError = signal<string | null>(null);
+  pwOk = signal(false);
+
+  saError = signal<string | null>(null);
+  saCreating = signal(false);
+
+  pwForm = new FormGroup({
+    old_password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    new_password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+  });
+
+  saForm = new FormGroup({
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl<string | null>(null),
+    temp_password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+  });
+
+  constructor(public auth: SuperAdminAuthService, private api: SuperAdminService) {
+    this.loadSuperAdmins();
+  }
+
+  loadSuperAdmins() {
+    this.api.listSuperAdmins().subscribe({
+      next: (rows) => this.superAdmins.set(rows || []),
+      error: () => {},
+    });
+  }
+
+  changePassword() {
+    this.pwError.set(null);
+    this.pwOk.set(false);
+    this.pwSaving.set(true);
+    const raw = this.pwForm.getRawValue();
+    this.auth.changePassword(raw.old_password, raw.new_password).subscribe({
+      next: () => {
+        this.pwSaving.set(false);
+        this.pwOk.set(true);
+        this.pwForm.reset({ old_password: '', new_password: '' });
+      },
+      error: (err) => {
+        this.pwSaving.set(false);
+        this.pwError.set(err?.error?.detail || err?.message || 'Password update failed');
+      },
+    });
+  }
+
+  createSuperAdmin() {
+    this.saError.set(null);
+    this.saCreating.set(true);
+    const raw = this.saForm.getRawValue();
+    this.api.createSuperAdmin({ email: raw.email.trim(), name: raw.name || null, temp_password: raw.temp_password }).subscribe({
+      next: (created) => {
+        this.saCreating.set(false);
+        this.superAdmins.set([created, ...this.superAdmins()]);
+        this.saForm.reset({ email: '', name: null, temp_password: '' });
+      },
+      error: (err) => {
+        this.saCreating.set(false);
+        this.saError.set(err?.error?.detail || err?.message || 'Create failed');
+      },
+    });
+  }
+}
+

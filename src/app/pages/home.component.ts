@@ -18,6 +18,7 @@ import { RouterLink } from '@angular/router';
             <div class="d-flex gap-2 flex-wrap">
               <a class="btn btn-primary btn-lg" routerLink="/attendance">Mark Attendance</a>
               <a class="btn btn-outline-light btn-lg" routerLink="/organizer/login">Organizer Login</a>
+              <a class="btn btn-outline-light btn-lg" routerLink="/superadmin/login">Super Admin</a>
             </div>
             <div class="mt-4 small text-white-50">FastAPI backend + Angular UI • Postgres storage • PDF certificates</div>
           </div>
@@ -93,7 +94,7 @@ import { RouterLink } from '@angular/router';
               </p>
               <a class="btn btn-outline-primary" routerLink="/organizer/login">Organizer Login</a>
               <div class="mt-3 small text-secondary">
-                Default creds (dev): <code>organizer</code>/<code>organizer</code> (change in backend env).
+                Organizer login is OTP-based (email).
               </div>
             </div>
           </div>

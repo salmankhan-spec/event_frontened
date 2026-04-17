@@ -1,29 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { apiBaseUrl } from './config';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizerAuthService {
-  apiBaseUrl(): string {
-    const raw = (localStorage.getItem('apiBaseUrl') || 'http://localhost:8000').trim();
-    return raw.replace(/\/+$/, '');
-  }
-
-  apiKey(): string {
-    return localStorage.getItem('adminApiKey') || '';
-  }
-
   isLoggedIn(): boolean {
     return (localStorage.getItem('organizerToken') || '').trim().length > 0;
   }
 
   constructor(private http: HttpClient) {}
 
-  login(apiBaseUrl: string, username: string, password: string): Observable<void> {
-    const base = ((apiBaseUrl || '').trim() || 'http://127.0.0.1:8000').replace(/\/+$/, '');
-    localStorage.setItem('apiBaseUrl', base);
+  requestOtp(email: string): Observable<{ status: string; otp_sent: boolean; dev_otp?: string | null; reason?: string | null }> {
+    return this.http.post<{ status: string; otp_sent: boolean; dev_otp?: string | null; reason?: string | null }>(`${apiBaseUrl()}/auth/organizer/request-otp`, {
+      email,
+    });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<void> {
     return this.http
-      .post<{ access_token: string }>(`${base}/auth/login`, { username, password })
+      .post<{ access_token: string }>(`${apiBaseUrl()}/auth/organizer/verify-otp`, { email, otp })
       .pipe(
         map((res) => {
           localStorage.setItem('organizerToken', res.access_token);
