@@ -1,0 +1,82 @@
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { SuperAdminAuthService } from '../superadmin-auth.service';
+import { apiBaseUrl } from '../config';
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  template: `
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="mb-4">
+            <a routerLink="/" class="link-secondary text-decoration-none">← Back</a>
+            <h1 class="h3 fw-bold mt-2 mb-1">Super Admin Login</h1>
+            <div class="text-secondary">
+              Backend: <code>{{ baseUrl() }}</code>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="form" (ngSubmit)="submit()">
+                <div class="mb-3">
+                  <label class="form-label">Email / Username</label>
+                  <input class="form-control" formControlName="email" placeholder="admin&#64;local" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input class="form-control" type="password" formControlName="password" placeholder="admin12345" />
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <button class="btn btn-dark" type="submit" [disabled]="form.invalid || submitting()">
+                    <span *ngIf="!submitting()">Login</span>
+                    <span *ngIf="submitting()" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span *ngIf="submitting()" class="ms-2">Signing in…</span>
+                  </button>
+                  <div class="text-danger small" *ngIf="error()">{{ error() }}</div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="alert alert-light border mt-3 mb-0 small">
+            Seed creds (dev): <code>admin&#64;local</code> / <code>admin12345</code> (after migrations).
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+})
+export class SuperAdminLoginComponent {
+  submitting = signal(false);
+  error = signal<string | null>(null);
+
+  baseUrl = () => apiBaseUrl();
+
+  form = new FormGroup({
+    email: new FormControl('admin@local', { nonNullable: true, validators: [Validators.required] }),
+    password: new FormControl('admin12345', { nonNullable: true, validators: [Validators.required] }),
+  });
+
+  constructor(private auth: SuperAdminAuthService, private router: Router) {}
+
+  submit() {
+    this.error.set(null);
+    this.submitting.set(true);
+    const raw = this.form.getRawValue();
+    this.auth.login(raw.email.trim(), raw.password).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.router.navigateByUrl('/superadmin/organizers');
+      },
+      error: (err) => {
+        this.submitting.set(false);
+        this.error.set(err?.error?.detail || err?.message || 'Login failed');
+      },
+    });
+  }
+}
