@@ -1,0 +1,59 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { OrganizerAuthService } from '../organizer-auth.service';
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  template: `
+    <div class="container-fluid py-3">
+      <div class="row g-3">
+        <div class="col-12 col-lg-3 col-xl-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="fw-bold">Organizer</div>
+                  <div class="text-secondary small">Dashboard</div>
+                </div>
+                <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
+              </div>
+
+              <hr />
+
+              <div class="list-group">
+                <a
+                  class="list-group-item list-group-item-action"
+                  routerLink="/organizer/events"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                >
+                  Create Event
+                </a>
+                <a class="list-group-item list-group-item-action" routerLink="/organizer/registrations" routerLinkActive="active">
+                  View Registrations
+                </a>
+                <a class="list-group-item list-group-item-action" routerLink="/organizer/certificates" routerLinkActive="active">
+                  Certificate Template
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-9 col-xl-10">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  `,
+})
+export class OrganizerShellComponent {
+  constructor(private auth: OrganizerAuthService, private router: Router) {}
+
+  logout() {
+    this.auth.logout();
+    this.router.navigateByUrl('/organizer/login');
+  }
+}
