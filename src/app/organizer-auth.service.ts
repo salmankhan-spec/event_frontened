@@ -12,19 +12,29 @@ export class OrganizerAuthService {
   constructor(private http: HttpClient) {}
 
   requestOtp(email: string): Observable<{ status: string; otp_sent: boolean; dev_otp?: string | null; reason?: string | null }> {
-    return this.http.post<{ status: string; otp_sent: boolean; dev_otp?: string | null; reason?: string | null }>(`${apiBaseUrl()}/auth/organizer/request-otp`, {
-      email,
-    });
+    return this.http.post<{ status: string; otp_sent: boolean; dev_otp?: string | null; reason?: string | null }>(
+      `${apiBaseUrl()}/auth/organizer/request-otp`, { email }
+    );
   }
 
   verifyOtp(email: string, otp: string): Observable<void> {
     return this.http
       .post<{ access_token: string }>(`${apiBaseUrl()}/auth/organizer/verify-otp`, { email, otp })
-      .pipe(
-        map((res) => {
-          localStorage.setItem('organizerToken', res.access_token);
-        })
-      );
+      .pipe(map((res) => { localStorage.setItem('organizerToken', res.access_token); }));
+  }
+
+  setPassword(newPassword: string): Observable<void> {
+    return this.http.post<void>(
+      `${apiBaseUrl()}/auth/organizer/set-password`,
+      { new_password: newPassword },
+      { headers: { Authorization: `Bearer ${localStorage.getItem('organizerToken')}` } }
+    );
+  }
+
+  loginWithPassword(email: string, password: string): Observable<void> {
+    return this.http
+      .post<{ access_token: string }>(`${apiBaseUrl()}/auth/organizer/login`, { email, password })
+      .pipe(map((res) => { localStorage.setItem('organizerToken', res.access_token); }));
   }
 
   logout() {
