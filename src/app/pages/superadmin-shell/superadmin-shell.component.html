@@ -1,39 +1,69 @@
 ﻿
-    <div class="container-fluid py-3">
-      <div class="row g-3">
-        <div class="col-12 col-lg-3 col-xl-2">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between">
-                <div>
-                  <div class="fw-bold">Super Admin</div>
-                  <div class="text-secondary small">Setup & control</div>
-                </div>
-                <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
-              </div>
-
-              <div class="alert alert-warning border mt-3 mb-0 small" *ngIf="auth.firstLogin()">
-                First login detected. Password change recommended.
-              </div>
-
-              <hr />
-
-              <div class="list-group">
-                <a class="list-group-item list-group-item-action" routerLink="/superadmin/organizers" routerLinkActive="active">
-                  Organizers
-                </a>
-                <a class="list-group-item list-group-item-action" routerLink="/superadmin/settings" routerLinkActive="active">
-                  Settings
-                </a>
-              </div>
-            </div>
+<div class="container-fluid py-3">
+  <div class="row g-4">
+    <div class="col-12 col-lg-3 col-xl-2">
+      <aside class="workspace-sidebar workspace-sidebar-admin h-100 position-lg-sticky">
+        <div class="workspace-sidebar-top">
+          <div class="workspace-avatar workspace-avatar-admin">A</div>
+          <div>
+            <div class="workspace-kicker">Super Admin</div>
+            <div class="workspace-title">Setup & Control</div>
           </div>
         </div>
 
-        <div class="col-12 col-lg-9 col-xl-10">
-          <router-outlet></router-outlet>
+        <div class="workspace-card mt-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-secondary small">Security status</div>
+              <div class="fw-semibold" [class.text-warning]="auth.firstLogin()">Account review</div>
+            </div>
+            <span class="workspace-chip" [class.bg-warning-subtle]="auth.firstLogin()" [class.text-warning]="auth.firstLogin()"
+              >{{ auth.firstLogin() ? 'Action needed' : 'Protected' }}</span
+            >
+          </div>
+          <div class="text-secondary small mt-2">
+            {{ auth.firstLogin() ? 'Please change the default password before continuing.' : 'Admin controls are ready.' }}
+          </div>
         </div>
+
+        <div class="workspace-alert mt-4" *ngIf="auth.firstLogin()">
+          <div class="fw-semibold">First login detected</div>
+          <div class="small">Change your password from Settings to secure the account.</div>
+        </div>
+
+        <nav class="workspace-nav mt-4">
+          <a class="workspace-link" routerLink="/superadmin/organizers" routerLinkActive="active">
+            <span class="workspace-link-icon">O</span>
+            <span>
+              <span class="d-block fw-semibold">Organizers</span>
+              <span class="d-block small text-secondary">Accounts and status</span>
+            </span>
+          </a>
+          <a class="workspace-link" routerLink="/superadmin/settings" routerLinkActive="active">
+            <span class="workspace-link-icon">S</span>
+            <span>
+              <span class="d-block fw-semibold">Settings</span>
+              <span class="d-block small text-secondary">Password and admin users</span>
+            </span>
+          </a>
+        </nav>
+
+        <div class="workspace-footer mt-4">
+          <div class="text-secondary small">Signed in as super admin</div>
+          <div class="d-flex align-items-center justify-content-between gap-2 mt-2">
+            <div class="fw-semibold">Control center</div>
+            <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="col-12 col-lg-9 col-xl-10">
+      <div class="workspace-content">
+        <router-outlet></router-outlet>
       </div>
     </div>
+  </div>
+</div>
   
 

@@ -1,47 +1,104 @@
-﻿
-    <div class="app-hero">
-      <div class="container py-5">
-        <div class="row align-items-center g-4">
-          <div class="col-lg-7 text-white">
-            <div class="badge text-bg-primary mb-3">Event Platform</div>
-            <h1 class="display-6 fw-bold mb-3">Attendance + Certificates, end-to-end</h1>
-            <p class="text-white-50 mb-4">
-              Organizer creates an event, attendees mark check-in/check-out, and certificates are managed from the organizer
-              dashboard (generate, download, and optional email dispatch).
-            </p>
-            <div class="d-flex gap-2 flex-wrap">
-              <a class="btn btn-primary btn-lg" routerLink="/attendance">Mark Attendance</a>
-              <a class="btn btn-outline-light btn-lg" routerLink="/organizer/login">Organizer Login</a>
-              <a class="btn btn-outline-light btn-lg" routerLink="/superadmin/login">Super Admin</a>
+<div class="app-hero">
+  <div class="container py-5">
+    <div class="row align-items-stretch g-4">
+      <div class="col-lg-7 text-white">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill hero-pill mb-4">
+          <span class="hero-pill-dot"></span>
+          <span class="small fw-semibold text-uppercase">Event Operations Dashboard</span>
+        </div>
+
+        <h1 class="display-5 fw-bold lh-sm mb-3">
+          Attendance, registrations, and certificates in one clean workflow.
+        </h1>
+
+        <p class="lead text-white-50 mb-4" style="max-width: 42rem;">
+          Build events, capture attendance, issue certificates, and manage organizers from a single responsive dashboard.
+          Designed for workshops, conferences, meetups, and internal training programs.
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary btn-lg" routerLink="/attendance">Open Attendance</a>
+          <a class="btn btn-outline-light btn-lg" routerLink="/organizer/login">Organizer Login</a>
+          <a class="btn btn-outline-light btn-lg" routerLink="/superadmin/login">Super Admin</a>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3 mt-4 text-white-50 small">
+          <span>FastAPI backend</span>
+          <span>Angular frontend</span>
+          <span>Postgres storage</span>
+          <span>PDF certificates</span>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card app-hero-card h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <div>
+                <div class="text-secondary small">Live overview</div>
+                <h2 class="h5 mb-0 fw-semibold">Dashboard snapshot</h2>
+              </div>
+              <span class="badge text-bg-success-subtle text-success border border-success-subtle">Live</span>
             </div>
-            <div class="mt-4 small text-white-50">FastAPI backend + Angular UI + Postgres storage + PDF certificates</div>
-          </div>
-          <div class="col-lg-5">
-            <div class="card app-hero-card">
-              <div class="card-body">
-                <h5 class="card-title fw-semibold mb-3">Flow (Quick)</h5>
-                <div class="d-grid gap-3">
-                  <div class="d-flex gap-3">
-                    <div class="step-dot bg-primary-subtle text-primary">1</div>
-                    <div>
-                      <div class="fw-semibold">Create Event</div>
-                      <div class="text-secondary small">Organizer dashboard se event banayein.</div>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3">
-                    <div class="step-dot bg-success-subtle text-success">2</div>
-                    <div>
-                      <div class="fw-semibold">Check-in / Check-out</div>
-                      <div class="text-secondary small">Attendee Event ID + email se attendance mark kare.</div>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3">
-                    <div class="step-dot bg-dark-subtle text-dark">3</div>
-                    <div>
-                      <div class="fw-semibold">Certificates</div>
-                      <div class="text-secondary small">Organizer table se generate/download (SMTP ho to dispatch).</div>
-                    </div>
-                  </div>
+
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="dashboard-metric">
+                  <div class="text-secondary small">Active events</div>
+                  <div class="fs-3 fw-bold">24</div>
+                  <div class="text-success small">+18% this month</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="dashboard-metric">
+                  <div class="text-secondary small">Attendees</div>
+                  <div class="fs-3 fw-bold">1.2k</div>
+                  <div class="text-secondary small">Checked in and tracked</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="dashboard-metric">
+                  <div class="text-secondary small">Certificates</div>
+                  <div class="fs-3 fw-bold">980</div>
+                  <div class="text-secondary small">Generated this quarter</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="dashboard-metric">
+                  <div class="text-secondary small">Organizers</div>
+                  <div class="fs-3 fw-bold">12</div>
+                  <div class="text-secondary small">Active team members</div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h3 class="h6 mb-0 fw-semibold">Next actions</h3>
+              <span class="text-secondary small">Today</span>
+            </div>
+
+            <div class="d-grid gap-3">
+              <div class="action-row">
+                <div class="action-icon bg-primary-subtle text-primary">1</div>
+                <div>
+                  <div class="fw-semibold">Create the event</div>
+                  <div class="text-secondary small">Title, location, and description from the organizer dashboard.</div>
+                </div>
+              </div>
+              <div class="action-row">
+                <div class="action-icon bg-success-subtle text-success">2</div>
+                <div>
+                  <div class="fw-semibold">Capture attendance</div>
+                  <div class="text-secondary small">Use Event ID and email for check-in / check-out.</div>
+                </div>
+              </div>
+              <div class="action-row">
+                <div class="action-icon bg-dark-subtle text-dark">3</div>
+                <div>
+                  <div class="fw-semibold">Send certificates</div>
+                  <div class="text-secondary small">Generate PDFs and dispatch them when ready.</div>
                 </div>
               </div>
             </div>
@@ -49,84 +106,124 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="container py-4">
-      <div class="row g-3">
-        <div class="col-lg-7">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <h5 class="mb-0 fw-semibold">For Attendees</h5>
-                <span class="badge text-bg-success">Public</span>
-              </div>
-              <p class="text-secondary mb-3">
-                Aapko sirf <span class="fw-semibold">Event ID</span> aur apna <span class="fw-semibold">email</span> chahiye.
-                Check-in time par details fill karein, aur exit par check-out.
-              </p>
-              <div class="d-flex gap-2 flex-wrap">
-                <a class="btn btn-primary" routerLink="/attendance">Open Attendance</a>
-                <a class="btn btn-outline-secondary" routerLink="/">Need help?</a>
-              </div>
-              <hr class="my-4" />
-              <div class="small text-secondary">
-                Note: Certificates organizer manage karta hai. Agar aapne wrong info dali, organizer se update karwa sakte hain.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <h5 class="mb-0 fw-semibold">For Organizers</h5>
-                <span class="badge text-bg-dark">Private</span>
-              </div>
-              <p class="text-secondary mb-3">
-                Events create karein, registrations/attendance track karein, aur certificate generate/download karein -
-                all from one dashboard.
-              </p>
-              <a class="btn btn-outline-primary" routerLink="/organizer/login">Organizer Login</a>
-              <div class="mt-3 small text-secondary">
-                Organizer login is OTP-based (email).
-              </div>
-            </div>
-          </div>
+<div class="container py-4 py-lg-5">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card feature-card h-100">
+        <div class="card-body p-4">
+          <div class="feature-badge bg-primary-subtle text-primary mb-3">Attendees</div>
+          <h2 class="h5 fw-semibold">Fast attendance flow</h2>
+          <p class="text-secondary mb-0">
+            A simple check-in / check-out screen with validation, status feedback, and clean records for every event.
+          </p>
         </div>
       </div>
+    </div>
 
-      <div class="row g-3 mt-1">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <h5 class="mb-0 fw-semibold">What you get</h5>
-                <span class="text-secondary small">Built for workshops, HR trainings, meetups</span>
+    <div class="col-md-4">
+      <div class="card feature-card h-100">
+        <div class="card-body p-4">
+          <div class="feature-badge bg-success-subtle text-success mb-3">Organizers</div>
+          <h2 class="h5 fw-semibold">Complete control panel</h2>
+          <p class="text-secondary mb-0">
+            Manage events, registrations, templates, and certificate delivery from one organized workspace.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card feature-card h-100">
+        <div class="card-body p-4">
+          <div class="feature-badge bg-dark-subtle text-dark mb-3">Admins</div>
+          <h2 class="h5 fw-semibold">Role-based access</h2>
+          <p class="text-secondary mb-0">
+            Super admins can create organizers, manage access, and keep the platform ready for production use.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-lg-7">
+      <div class="card feature-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h2 class="h5 mb-0 fw-semibold">Why this works well</h2>
+            <span class="text-secondary small">Responsive by design</span>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="mini-panel h-100">
+                <div class="fw-semibold mb-1">Responsive layout</div>
+                <div class="text-secondary small">Stacks cleanly on mobile and expands into a dashboard grid on desktop.</div>
               </div>
-              <div class="row g-3 mt-1">
-                <div class="col-md-4">
-                  <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Clean Attendance</div>
-                    <div class="text-secondary small">Check-in/out timestamps saved in DB with validation.</div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Certificate PDFs</div>
-                    <div class="text-secondary small">Template-based PDF generation, downloadable per attendee.</div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Organizer Control</div>
-                    <div class="text-secondary small">Dashboard tables for registrations + certificate management.</div>
-                  </div>
-                </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mini-panel h-100">
+                <div class="fw-semibold mb-1">Readable English copy</div>
+                <div class="text-secondary small">Simple, professional copy that feels clear for every user role.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mini-panel h-100">
+                <div class="fw-semibold mb-1">Consistent UI language</div>
+                <div class="text-secondary small">Cards, badges, and calls-to-action follow one design system.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mini-panel h-100">
+                <div class="fw-semibold mb-1">Production-ready flow</div>
+                <div class="text-secondary small">Built around the event lifecycle: create, attend, issue, and manage.</div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  
 
+    <div class="col-lg-5">
+      <div class="card feature-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h2 class="h5 mb-0 fw-semibold">Quick start</h2>
+            <span class="text-secondary small">3 steps</span>
+          </div>
+
+          <div class="timeline-list">
+            <div class="timeline-item">
+              <div class="timeline-dot bg-primary-subtle text-primary">1</div>
+              <div>
+                <div class="fw-semibold">Log in as organizer</div>
+                <div class="text-secondary small">Create an event and publish the registration link.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot bg-success-subtle text-success">2</div>
+              <div>
+                <div class="fw-semibold">Track attendees</div>
+                <div class="text-secondary small">Collect attendance at the venue or from the scanner panel.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot bg-dark-subtle text-dark">3</div>
+              <div>
+                <div class="fw-semibold">Generate PDFs</div>
+                <div class="text-secondary small">Download certificates instantly or dispatch them from the dashboard.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <a class="btn btn-primary w-100" routerLink="/organizer/login">Open Organizer Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
