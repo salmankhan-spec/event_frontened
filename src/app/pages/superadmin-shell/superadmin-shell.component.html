@@ -1,0 +1,39 @@
+﻿
+    <div class="container-fluid py-3">
+      <div class="row g-3">
+        <div class="col-12 col-lg-3 col-xl-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="fw-bold">Super Admin</div>
+                  <div class="text-secondary small">Setup & control</div>
+                </div>
+                <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
+              </div>
+
+              <div class="alert alert-warning border mt-3 mb-0 small" *ngIf="auth.firstLogin()">
+                First login detected. Password change recommended.
+              </div>
+
+              <hr />
+
+              <div class="list-group">
+                <a class="list-group-item list-group-item-action" routerLink="/superadmin/organizers" routerLinkActive="active">
+                  Organizers
+                </a>
+                <a class="list-group-item list-group-item-action" routerLink="/superadmin/settings" routerLinkActive="active">
+                  Settings
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-9 col-xl-10">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  
+

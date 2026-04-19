@@ -1,0 +1,119 @@
+﻿
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-5">
+          <div class="mb-4">
+            <a routerLink="/" class="link-secondary text-decoration-none">&larr; Back</a>
+            <h1 class="h3 fw-bold mt-2 mb-1">Organizer Login</h1>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+              <!-- Normal password login -->
+              <ng-container *ngIf="step() === 'password-login'">
+                <form [formGroup]="pwForm" (ngSubmit)="submitPassword()">
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" formControlName="email" placeholder="organizer@example.com" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input class="form-control" type="password" formControlName="password" placeholder="Your password" />
+                  </div>
+                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting()">
+                    <span *ngIf="!submitting()">Login</span>
+                    <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
+                    <span *ngIf="submitting()">Logging in...</span>
+                  </button>
+                  <div class="text-center mt-3">
+                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); goToForgot()">
+                      Forgot password? Reset via OTP
+                    </a>
+                  </div>
+                </form>
+              </ng-container>
+
+              <!-- OTP email entry (first login or forgot password) -->
+              <ng-container *ngIf="step() === 'otp-email'">
+                <p class="text-secondary small mb-3">
+                  {{ otpReason() === 'first' ? 'Enter your email to receive a one-time password.' : 'Enter your email to reset your password.' }}
+                </p>
+                <form [formGroup]="otpEmailForm" (ngSubmit)="requestOtp()">
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" formControlName="email" placeholder="organizer@example.com" />
+                  </div>
+                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting()">
+                    <span *ngIf="!submitting()">Send OTP</span>
+                    <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
+                    <span *ngIf="submitting()">Sending...</span>
+                  </button>
+                  <div class="text-center mt-3" *ngIf="otpReason() === 'forgot'">
+                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); step.set('password-login')">
+                      Back to login
+                    </a>
+                  </div>
+                </form>
+              </ng-container>
+
+              <!-- OTP verify -->
+              <ng-container *ngIf="step() === 'otp-verify'">
+                <p class="text-secondary small mb-3">OTP sent to <strong>{{ otpEmailForm.controls.email.value }}</strong></p>
+                <form [formGroup]="otpVerifyForm" (ngSubmit)="verifyOtp()">
+                  <div class="mb-3">
+                    <label class="form-label">OTP</label>
+                    <input class="form-control" formControlName="otp" placeholder="6-digit OTP" />
+                    <div class="form-text text-success" *ngIf="devOtp()">
+                      Dev OTP: <code>{{ devOtp() }}</code>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting()">
+                    <span *ngIf="!submitting()">Verify OTP</span>
+                    <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
+                    <span *ngIf="submitting()">Verifying...</span>
+                  </button>
+                  <div class="text-center mt-3">
+                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); step.set('otp-email')">
+                      Resend OTP
+                    </a>
+                  </div>
+                </form>
+              </ng-container>
+
+              <!-- Set / Reset password -->
+              <ng-container *ngIf="step() === 'set-password'">
+                <p class="text-secondary small mb-3">
+                  {{ otpReason() === 'first' ? 'Welcome! Set a password for future logins.' : 'Set your new password.' }}
+                </p>
+                <form [formGroup]="setPasswordForm" (ngSubmit)="submitSetPassword()">
+                  <div class="mb-3">
+                    <label class="form-label">New Password</label>
+                    <input class="form-control" type="password" formControlName="password" placeholder="Min 8 characters" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input class="form-control" type="password" formControlName="confirm" placeholder="Repeat password" />
+                  </div>
+                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting()">
+                    <span *ngIf="!submitting()">Set Password & Continue</span>
+                    <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
+                    <span *ngIf="submitting()">Saving...</span>
+                  </button>
+                </form>
+              </ng-container>
+
+            </div>
+          </div>
+
+          <!-- First time? hint -->
+          <div class="text-center mt-3" *ngIf="step() === 'password-login'">
+            <a href="#" class="small link-secondary" (click)="$event.preventDefault(); goToFirstLogin()">
+              First time login? Use OTP
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
