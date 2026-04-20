@@ -50,7 +50,7 @@
                     <span *ngIf="submitting()">Sending...</span>
                   </button>
                   <div class="text-center mt-3" *ngIf="otpReason() === 'forgot'">
-                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); step.set('password-login')">
+                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); goToPasswordLogin()">
                       Back to login
                     </a>
                   </div>
@@ -63,19 +63,47 @@
                 <form [formGroup]="otpVerifyForm" (ngSubmit)="verifyOtp()">
                   <div class="mb-3">
                     <label class="form-label">OTP</label>
-                    <input class="form-control" formControlName="otp" placeholder="6-digit OTP" />
+                    <app-otp-input
+                      formControlName="otp"
+                      [length]="otpLength"
+                      [invalid]="otpVerifyForm.controls.otp.touched && otpVerifyForm.controls.otp.invalid"
+                      [disabled]="submitting()"
+                    />
                     <div class="form-text text-success" *ngIf="devOtp()">
                       Dev OTP: <code>{{ devOtp() }}</code>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                      <div
+                        class="form-text"
+                        [class.text-danger]="otpExpired()"
+                        [class.text-muted]="!otpExpired()"
+                      >
+                        <ng-container *ngIf="!otpExpired()">
+                          OTP expires in {{ formatOtpExpiry(otpExpiresInSeconds()) }}
+                        </ng-container>
+                        <ng-container *ngIf="otpExpired()">
+                          OTP expired. Please resend.
+                        </ng-container>
+                      </div>
+                      <a
+                        href="#"
+                        class="small link-secondary"
+                        [class.disabled]="!canResendOtp()"
+                        [attr.aria-disabled]="!canResendOtp()"
+                        (click)="$event.preventDefault(); resendOtp()"
+                      >
+                        Resend OTP
+                      </a>
+                    </div>
                   </div>
-                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting()">
+                  <button class="btn btn-primary w-100" type="submit" [disabled]="submitting() || otpExpired()">
                     <span *ngIf="!submitting()">Verify OTP</span>
                     <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
                     <span *ngIf="submitting()">Verifying...</span>
                   </button>
                   <div class="text-center mt-3">
-                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); step.set('otp-email')">
-                      Resend OTP
+                    <a href="#" class="small link-secondary" (click)="$event.preventDefault(); goToOtpEmail()">
+                      Change email
                     </a>
                   </div>
                 </form>
@@ -116,4 +144,3 @@
       </div>
     </div>
   
-

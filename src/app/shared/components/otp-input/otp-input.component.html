@@ -1,0 +1,19 @@
+<div class="otp-wrap" [class.otp-wrap--invalid]="invalid" [class.otp-wrap--disabled]="disabled">
+  <input
+    *ngFor="let d of digits; let i = index"
+    #otpCell
+    class="otp-cell"
+    [class.otp-cell--invalid]="invalid"
+    [disabled]="disabled"
+    [attr.autocomplete]="i === 0 ? autocomplete : null"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    maxlength="1"
+    [value]="digits[i]"
+    (focus)="onFocus()"
+    (keydown)="onKeyDown(i, $event)"
+    (paste)="onPaste(i, $event)"
+    (input)="onInput(i, $event)"
+    [attr.aria-label]="'OTP digit ' + (i + 1)"
+  />
+</div>
