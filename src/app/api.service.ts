@@ -11,6 +11,7 @@ export type EventCreate = {
   ends_at?: string | null;
 };
 
+
 export type EventOut = {
   id: string;
   title: string;
